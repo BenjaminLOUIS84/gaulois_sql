@@ -2,7 +2,7 @@
 -- REQUETES SQL EXERCICE GAULOIS
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
---Etape 1 Créer la Base de données et les tables
+--Etape 1 Créer la Base de données et les tables 
 --Etape 2 Lier les tables avec les Clés étrangères
 --Etape 3 Peupler la base de données avec INSERT INTO "table" () VALUES 
 --Etape 4 Requêtes SQL
@@ -10,6 +10,109 @@
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 --4
+--A partir du script SQL Gaulois fourni par votre formateur, écrivez et exécutez les requêtes SQL suivantes:
+
+--1. Nom des lieux qui finissent par 'um'.
+
+SELECT l.nom_lieu
+FROM lieu l
+WHERE l.nom_lieu LIKE '%um'
+
+--2. Nombre de personnages par lieu (trié par nombre de personnages décroissant).
+
+SELECT l.nom_lieu, COUNT(p.id_personnage) AS nombre_personnage
+FROM personnage p, lieu l
+WHERE l.id_lieu = p.id_lieu
+GROUP BY l.nom_lieu
+ORDER BY nombre_personnage DESC 
+
+--3. Nom des personnages + spécialité + adresse et lieu d'habitation, triés par lieu puis par nom de personnage.
+
+SELECT p.nom_personnage, s.nom_specialite, p.adresse_personnage, l.nom_lieu
+FROM personnage p, specialite s, lieu l
+WHERE s.id_specialite = p.id_specialite
+AND p.id_lieu = l.id_lieu
+ORDER BY l.nom_lieu
+
+--4. Nom des spécialités avec nombre de personnages par spécialité (trié par nombre de personnages décroissant).
+
+SELECT s.nom_specialite, COUNT(p.id_personnage) AS nombre_personnage
+FROM specialite s, personnage p
+WHERE p.id_specialite = s.id_specialite
+GROUP BY s.nom_specialite
+ORDER BY nombre_personnage DESC
+
+--5. Nom, date et lieu des batailles, classées de la plus récente à la plus ancienne (dates affichées au format jj/mm/aaaa).
+
+SELECT b.nom_bataille, b.date_bataille, l.nom_lieu
+FROM bataille b, lieu l
+WHERE b.id_lieu = l.id_lieu
+ORDER BY b.date_bataille DESC
+
+--6. Nom des potions + coût de réalisation de la potion (trié par coût décroissant).
+
+SELECT  p.nom_potion, SUM(i.cout_ingredient*c.qte) AS prix
+FROM potion p, composer c, ingredient i
+WHERE p.id_potion = c.id_potion
+GROUP BY p.nom_potion
+ORDER BY prix DESC
+
+--7. Nom des ingrédients + coût + quantité de chaque ingrédient qui composent la potion 'Santé'.
+
+SELECT i.nom_ingredient, i.cout_ingredient, c.qte, p.nom_potion
+FROM ingredient i, composer c, potion p
+WHERE p.id_potion = c.id_potion
+AND i.id_ingredient = c.id_ingredient
+AND p.nom_potion = "Santé"
+
+--8. Nom du ou des personnages qui ont pris le plus de casques dans la bataille 'Bataille du village gaulois'.
+
+
+
+--9. Nom des personnages et leur quantité de potion bue (en les classant du plus grand buveur au plus petit).
+--10. Nom de la bataille où le nombre de casques pris a été le plus important.
+--11. Combien existe-t-il de casques de chaque type et quel est leur coût total ? (classés par nombre décroissant)
+--12. Nom des potions dont un des ingrédients est le poisson frais.
+--13. Nom du / des lieu(x) possédant le plus d'habitants, en dehors du village gaulois.
+--14. Nom des personnages qui n'ont jamais bu aucune potion.
+--15. Nom du / des personnages qui n'ont pas le droit de boire de la potion 'Magique'.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
