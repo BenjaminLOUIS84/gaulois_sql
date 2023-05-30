@@ -67,14 +67,60 @@ AND p.nom_potion = "Santé"
 
 --8. Nom du ou des personnages qui ont pris le plus de casques dans la bataille 'Bataille du village gaulois'.
 
-
+SELECT p.nom_personnage, SUM(pc.qte) AS qte_tot, b.nom_bataille
+FROM personnage p, prendre_casque pc, bataille b
+WHERE b.nom_bataille = "Bataille du village gaulois"
+AND p.id_personnage = pc.id_personnage
+GROUP BY p.nom_personnage, b.nom_bataille
+HAVING (qte_tot)>20
+ORDER BY qte_tot DESC
 
 --9. Nom des personnages et leur quantité de potion bue (en les classant du plus grand buveur au plus petit).
+
+SELECT p.nom_personnage,  SUM(b.dose_boire) AS qnt_tot_consommée
+FROM personnage p, boire b
+WHERE p.id_personnage = b.id_personnage
+GROUP BY p.nom_personnage
+ORDER BY qnt_tot_consommée DESC
+
 --10. Nom de la bataille où le nombre de casques pris a été le plus important.
+
+SELECT b.nom_bataille, pc.qte
+FROM bataille b, prendre_casque pc
+WHERE b.id_bataille = pc.id_bataille
+ORDER BY pc.qte DESC
+LIMIT 1
+
 --11. Combien existe-t-il de casques de chaque type et quel est leur coût total ? (classés par nombre décroissant)
+
+SELECT tc.nom_type_casque, SUM(c.id_casque) AS total_type, SUM(c.cout_casque) AS cout_total_type
+FROM type_casque tc, casque c
+WHERE tc.id_type_casque = c.id_type_casque
+GROUP BY tc.nom_type_casque
+ORDER BY total_type, cout_total_type
+
 --12. Nom des potions dont un des ingrédients est le poisson frais.
+
+SELECT p.nom_potion, c.qte, i.nom_ingredient
+FROM potion p , ingredient i, composer c
+WHERE i.nom_ingredient = "Poisson frais"
+AND p.id_potion = c.id_potion
+AND i.id_ingredient = c.id_ingredient
+
 --13. Nom du / des lieu(x) possédant le plus d'habitants, en dehors du village gaulois.
+
+SELECT l.nom_lieu, SUM(p.id_lieu) AS nombre_hab
+FROM lieu l, personnage p
+WHERE l.id_lieu = p.id_lieu
+GROUP BY l.nom_lieu
+ORDER BY nombre_hab DESC
+LIMIT 7
+
+
 --14. Nom des personnages qui n'ont jamais bu aucune potion.
+
+
+
 --15. Nom du / des personnages qui n'ont pas le droit de boire de la potion 'Magique'.
 
 
