@@ -1,5 +1,5 @@
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
--- REQUETES SQL EXERCICE LE GAULOIS
+-- REQUETES SQL EXERCICE GAULOIS
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 --Etape 1 Créer la Base de données et les tables
@@ -7,6 +7,31 @@
 --Etape 3 Peupler la base de données avec INSERT INTO "table" () VALUES 
 --Etape 4 Requêtes SQL
 
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
+
+--4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
+--INFORMATIONS--
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 --1-2
 CREATE TABLE IF NOT EXISTS `autoriser_boire` 
@@ -18,6 +43,49 @@ CREATE TABLE IF NOT EXISTS `autoriser_boire`
   CONSTRAINT `FK_AUTO_PERSO` FOREIGN KEY (`id_personnage`) REFERENCES `personnage` (`id_personnage`),
   CONSTRAINT `FK_AUTO_POTION` FOREIGN KEY (`id_potion`) REFERENCES `potion` (`id_potion`)
 )
+--3
+INSERT INTO `autoriser_boire` (`id_potion`, `id_personnage`) VALUES
+	(1, 4),
+	(9, 5),
+	(1, 6),
+	(12, 6),
+	(1, 7),
+	(3, 7),
+	(7, 7),
+	(1, 8),
+	(1, 9),
+	(1, 10),
+	(1, 12),
+	(13, 12),
+	(1, 13),
+	(2, 13),
+	(4, 13),
+	(6, 13),
+	(10, 13),
+	(13, 14),
+	(1, 15),
+	(4, 17),
+	(6, 19),
+	(6, 20),
+	(1, 22),
+	(5, 23),
+	(1, 24),
+	(1, 25),
+	(3, 25),
+	(11, 26),
+	(8, 30),
+	(8, 32),
+	(11, 32),
+	(5, 33),
+	(14, 33),
+	(15, 33),
+	(1, 34),
+	(9, 35),
+	(1, 36),
+	(7, 39),
+	(14, 42),
+	(1, 44);
+
 
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 --1-2
@@ -31,6 +99,23 @@ CREATE TABLE IF NOT EXISTS `bataille` (
   KEY `FK_BATAILLE_LIEU` (`id_lieu`),
   CONSTRAINT `FK_BATAILLE_LIEU` FOREIGN KEY (`id_lieu`) REFERENCES `lieu` (`id_lieu`)
 )
+--3
+INSERT INTO `bataille` (`id_bataille`, `nom_bataille`, `date_bataille`, `id_lieu`) VALUES
+	(1, 'Bataille du village gaulois', '0050-11-30', 1),
+	(2, 'Anniversaire d\'Obélix', '0050-07-08', 2),
+	(3, 'Raid gaulois sur Petibonum', '0050-04-25', 5),
+	(4, 'Siège d\'Alesia', '0052-05-01', 16),
+	(5, 'Bataille de Gergovie', '0052-03-26', 17),
+	(6, 'Rapt de druides', '0050-01-22', 7),
+	(7, 'Raid gaulois sur Aquarium', '0050-08-06', 4),
+	(8, 'Bagarre du siècle', '0050-02-25', 8),
+	(9, 'Attaque de la banque postale', '0050-06-30', 12),
+	(10, 'Raid gaulois sur Laudanum', '0050-09-20', 3),
+	(11, 'Attaque du bateau pirate', '0050-03-10', 10),
+	(12, 'Invasion de la Bretagne', '0050-04-04', 10),
+	(13, 'Bataille des cinq armées', '0050-09-21', 18),
+	(14, 'Percée de Divodurum', '0050-01-30', 11),
+	(15, 'Embuscade de la rue Tabaga', '0050-04-02', 9);
 
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 --1-2
@@ -45,6 +130,37 @@ CREATE TABLE IF NOT EXISTS `boire` (
   CONSTRAINT `FK_BOIRE_PERSO` FOREIGN KEY (`id_personnage`) REFERENCES `personnage` (`id_personnage`),
   CONSTRAINT `FK_BOIRE_POTION` FOREIGN KEY (`id_potion`) REFERENCES `potion` (`id_potion`)
 ) 
+--3
+INSERT INTO `boire` (`id_potion`, `id_personnage`, `date_boire`, `dose_boire`) VALUES
+	(1, 4, '0050-06-05', 2),
+	(1, 6, '0050-05-01', 2),
+	(1, 8, '0050-02-24', 9),
+	(1, 9, '0050-06-21', 1),
+	(1, 10, '0050-05-31', 3),
+	(1, 13, '0050-01-20', 2),
+	(1, 15, '0050-07-12', 1),
+	(1, 22, '0050-04-30', 3),
+	(1, 36, '0050-04-30', 3),
+	(2, 13, '0050-02-01', 12),
+	(3, 7, '0050-10-10', 2),
+	(4, 13, '0050-01-02', 5),
+	(4, 17, '0050-04-10', 5),
+	(5, 23, '0050-08-21', 2),
+	(5, 33, '0050-10-12', 7),
+	(6, 16, '0050-07-02', 1),
+	(6, 19, '0050-09-01', 12),
+	(6, 20, '0050-09-01', 12),
+	(7, 39, '0050-09-09', 20),
+	(8, 32, '0050-03-02', 8),
+	(9, 5, '0050-01-01', 38),
+	(9, 9, '0050-02-01', 7),
+	(9, 35, '0050-03-06', 14),
+	(10, 13, '0050-04-15', 20),
+	(11, 32, '0050-10-02', 5),
+	(12, 6, '0050-03-02', 6),
+	(13, 14, '0050-10-04', 3),
+	(14, 42, '0050-09-30', 3);
+
 
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 --1-2
@@ -57,6 +173,28 @@ CREATE TABLE IF NOT EXISTS `casque` (
   KEY `FK_CASQUE_TYPECASQUE` (`id_type_casque`),
   CONSTRAINT `FK_CASQUE_TYPECASQUE` FOREIGN KEY (`id_type_casque`) REFERENCES `type_casque` (`id_type_casque`)
 ) 
+--3
+INSERT INTO `casque` (`id_casque`, `nom_casque`, `cout_casque`, `id_type_casque`) VALUES
+	(1, 'Villanovien', 865, 1),
+	(2, 'Negau', 498, 1),
+	(3, 'Corinthien', 765, 2),
+	(4, 'Spangenhelm', 1200, 4),
+	(5, 'Italo-celtique', 660, 1),
+	(10, 'Weisenau', 50, 1),
+	(11, 'Impérial-gaulois', 200, 1),
+	(12, 'Gallois', 540, 4),
+	(13, 'Wisigoth', 631, 4),
+	(14, 'Ostrogoth', 743, 4),
+	(15, 'A cornes', 2900, 3),
+	(16, 'Veksø', 7820, 3),
+	(17, 'Enkomi', 3140, 3),
+	(18, 'Haguenau', 140, 1),
+	(19, 'Picte', 160, 3),
+	(20, 'Athénien', 452, 2),
+	(21, 'Spartiate', 901, 2),
+	(22, 'Phrygien', 840, 2),
+	(23, 'Hoplite', 600, 2);
+
 
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 --1-2
@@ -69,6 +207,34 @@ CREATE TABLE IF NOT EXISTS `composer` (
   CONSTRAINT `FK_COMPOSER_INGREDIENT` FOREIGN KEY (`id_ingredient`) REFERENCES `ingredient` (`id_ingredient`),
   CONSTRAINT `FK_COMPOSER_POTION` FOREIGN KEY (`id_potion`) REFERENCES `potion` (`id_potion`)
 ) 
+--3
+INSERT INTO `composer` (`id_potion`, `id_ingredient`, `qte`) VALUES
+	(1, 4, 2),
+	(1, 5, 20),
+	(1, 23, 4),
+	(1, 24, 6),
+	(2, 10, 6),
+	(2, 25, 1),
+	(3, 9, 78),
+	(3, 23, 3),
+	(3, 25, 1),
+	(4, 15, 1),
+	(5, 3, 4),
+	(6, 8, 2),
+	(6, 17, 3),
+	(7, 2, 41),
+	(7, 24, 5),
+	(8, 6, 7),
+	(9, 1, 48),
+	(9, 10, 3),
+	(9, 19, 15),
+	(10, 11, 40),
+	(11, 21, 50),
+	(12, 18, 3),
+	(13, 10, 10),
+	(13, 26, 2),
+	(14, 16, 3);
+
 
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 --1-2
@@ -235,6 +401,26 @@ CREATE TABLE IF NOT EXISTS `prendre_casque` (
   CONSTRAINT `FK_PRCSQ_CASQUE` FOREIGN KEY (`id_casque`) REFERENCES `casque` (`id_casque`),
   CONSTRAINT `FK_PRCSQ_PERSO` FOREIGN KEY (`id_personnage`) REFERENCES `personnage` (`id_personnage`)
 )
+--3
+INSERT INTO `prendre_casque` (`id_casque`, `id_personnage`, `id_bataille`, `qte`) VALUES
+	(2, 8, 1, 8),
+	(2, 15, 15, 4),
+	(3, 4, 11, 1),
+	(3, 20, 13, 24),
+	(4, 22, 15, 2),
+	(5, 4, 3, 5),
+	(5, 8, 5, 10),
+	(5, 10, 7, 4),
+	(10, 4, 1, 21),
+	(10, 5, 2, 42),
+	(11, 5, 2, 34),
+	(11, 5, 10, 24),
+	(14, 5, 9, 32),
+	(14, 36, 12, 1),
+	(16, 5, 11, 2),
+	(17, 13, 13, 1),
+	(18, 5, 1, 60),
+	(18, 8, 1, 12);
 
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 --1-2
