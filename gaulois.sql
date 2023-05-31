@@ -27,43 +27,62 @@ WHERE l.id_lieu = p.id_lieu										-- Faire 1 jointure quand on utilise 2 tabl
 GROUP BY l.nom_lieu												-- GROUP BY Permet de grouper le nombre de personnage par lieu et d'utiliser des opérations dans SELECT
 ORDER BY nombre_personnage DESC 								-- ORDER BY Permet de trier le nombre de personne par ordre décroissant DESC et peut utiliser l'alias en référence
 
+--REQUETE SQL CORRIGEE
+SELECT l.nom_lieu, COUNT(p.id_personnage)AS nombre_personnage
+FROM personnage p 
+INNER JOIN lieu l
+ON l.id_lieu = p.id_lieu
+GROUP BY l.id_lieu
+ORDER BY nombre_personnage DESC
+
 --3. Nom des personnages + spécialité + adresse et lieu d'habitation, triés par lieu puis par nom de personnage.
 
 SELECT p.nom_personnage, s.nom_specialite, p.adresse_personnage, l.nom_lieu
-FROM personnage p, specialite s, lieu l
-WHERE s.id_specialite = p.id_specialite
-AND p.id_lieu = l.id_lieu										-- AND Remplace WHERE car on ne peut en mettre q'un
+FROM personnage p
+INNER JOIN specialite s
+ON p.id_specialite = s.id_specialite
+INNER JOIN lieu l
+ON p.id_lieu= l.id_lieu
 ORDER BY l.nom_lieu
+
 
 --4. Nom des spécialités avec nombre de personnages par spécialité (trié par nombre de personnages décroissant).
 
 SELECT s.nom_specialite, COUNT(p.id_personnage) AS nombre_personnage
-FROM specialite s, personnage p
-WHERE p.id_specialite = s.id_specialite
-GROUP BY s.nom_specialite								
+FROM specialite s
+INNER JOIN personnage p
+ON p.id_specialite = s.id_specialite
+GROUP BY s.id_specialite								
 ORDER BY nombre_personnage DESC									
 
 --5. Nom, date et lieu des batailles, classées de la plus récente à la plus ancienne (dates affichées au format jj/mm/aaaa).
 
-SELECT b.nom_bataille, b.date_bataille, l.nom_lieu
-FROM bataille b, lieu l
-WHERE b.id_lieu = l.id_lieu
-ORDER BY b.date_bataille DESC
+SELECT nom_bataille, DATE_FORMAT(date_bataille, "%d/%m/%Y") AS date_bataille, nom_lieu	--DATE_FORMAT Permet de modifier le format d'une date
+FROM bataille b
+INNER JOIN lieu l
+ON b.id_lieu = l.id_lieu
+ORDER BY b.date_bataille DESC;
+
 
 --6. Nom des potions + coût de réalisation de la potion (trié par coût décroissant).
 
-SELECT  p.nom_potion, SUM(i.cout_ingredient*c.qte) AS prix		--SUM() Pour faire une opération sur des références ici on calcul le coût des ingrédients (coût de l'ingrédient X quantité)
-FROM potion p, composer c, ingredient i
-WHERE p.id_potion = c.id_potion
-GROUP BY p.nom_potion
+SELECT  p.nom_potion, SUM(i.cout_ingredient*c.qte) AS prix		--SUM Permet de calculer la somme mais peut servir à faire le calcul suivant (le coût des ingrédients X la quantité)
+FROM potion p
+INNER JOIN composer c
+ON p.id_potion = c.id_potion
+INNER JOIN ingredient i
+ON c.id_ingredient = i.id_ingredient
+GROUP BY p.id_potion
 ORDER BY prix DESC
 
 --7. Nom des ingrédients + coût + quantité de chaque ingrédient qui composent la potion 'Santé'.
 
 SELECT i.nom_ingredient, i.cout_ingredient, c.qte, p.nom_potion
-FROM ingredient i, composer c, potion p
-WHERE p.id_potion = c.id_potion
-AND i.id_ingredient = c.id_ingredient
+FROM ingredient i
+INNER JOIN composer c
+ON i.id_ingredient = c.id_ingredient
+INNER JOIN potion p
+ON p.id_potion = c.id_potion
 AND p.nom_potion = "Santé"										--Condition pour limiter l'affichage des références de la potion Santé
 
 --8. Nom du ou des personnages qui ont pris le plus de casques dans la bataille 'Bataille du village gaulois'.
