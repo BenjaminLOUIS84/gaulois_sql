@@ -17,7 +17,7 @@
 SELECT l.nom_lieu			 	-- SELECT: nom de la colone ou des colones Utilisé pour lire des données issues de la base de données en retournant des enregistrements dans un tableau de résultat.
 FROM lieu l						-- FROM: nom de la table indique le lieu dans lequel les données à lire se trouvent
 WHERE l.nom_lieu LIKE '%um'		-- La commande WHERE dans une requête SQL permet d’extraire les lignes d’une base de données qui respectent une condition.
---								--'%um' permet de filtrer les références qui finissent par um
+--								--'%um' permet de filtrer les références qui finissent par um	--LIKE permet d’effectuer une recherche sur un modèle particulier.
 
 --2. Nombre de personnages par lieu (trié par nombre de personnages décroissant).
 
@@ -111,8 +111,11 @@ AND i.id_ingredient = c.id_ingredient
 --13. Nom du / des lieu(x) possédant le plus d'habitants, en dehors du village gaulois.
 
 SELECT l.nom_lieu, SUM(p.id_lieu) AS nombre_hab
-FROM lieu l, personnage p
-WHERE l.id_lieu = p.id_lieu
+
+FROM lieu l									--Equivaut à 	FROM lieu l, personnage p
+INNER JOIN personnage p						--				WHERE l.id_lieu = p.id_lieu
+ON l.id_lieu = p.id_lieu					--INNER JOIN:	Jointure interne pour retourner les enregistrements quand la condition est vrai dans les 2 tables. 
+
 GROUP BY l.nom_lieu
 ORDER BY nombre_hab DESC
 LIMIT 7
@@ -120,9 +123,17 @@ LIMIT 7
 
 --14. Nom des personnages qui n'ont jamais bu aucune potion.
 
+SELECT p.nom_personnage, b.dose_boire
+FROM personnage p
+LEFT JOIN boire b 							--LEFT JOIN:	Jointure externe pour retourner tous les enregistrements de la table de gauche (LEFT = gauche) même si la condition n’est pas vérifié dans l’autre table.
+ON b.id_personnage = p.id_personnage		--On peut cumuler WHERE et les jointures JOIN
+WHERE b.dose_boire IS NULL					--IS NULL permet de filtrer les références qui n'ont jamais bu de potion (Valeur par défaut NULL)
+GROUP BY p.nom_personnage, b.dose_boire
 
 
 --15. Nom du / des personnages qui n'ont pas le droit de boire de la potion 'Magique'.
+
+
 
 
 
