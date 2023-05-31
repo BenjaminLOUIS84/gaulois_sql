@@ -14,24 +14,25 @@
 
 --1. Nom des lieux qui finissent par 'um'.
 
-SELECT l.nom_lieu
-FROM lieu l
-WHERE l.nom_lieu LIKE '%um'
+SELECT l.nom_lieu			 	-- SELECT: nom de la colone ou des colones Utilisé pour lire des données issues de la base de données en retournant des enregistrements dans un tableau de résultat.
+FROM lieu l						-- FROM: nom de la table indique le lieu dans lequel les données à lire se trouvent
+WHERE l.nom_lieu LIKE '%um'		-- La commande WHERE dans une requête SQL permet d’extraire les lignes d’une base de données qui respectent une condition.
+--								--'%um' permet de filtrer les références qui finissent par um
 
 --2. Nombre de personnages par lieu (trié par nombre de personnages décroissant).
 
-SELECT l.nom_lieu, COUNT(p.id_personnage) AS nombre_personnage
-FROM personnage p, lieu l
-WHERE l.id_lieu = p.id_lieu
-GROUP BY l.nom_lieu
-ORDER BY nombre_personnage DESC 
+SELECT l.nom_lieu, COUNT(p.id_personnage) AS nombre_personnage	-- COUNT() Pour compter le nombre de références -- AS est un alias permet de renomer une colone
+FROM personnage p, lieu l										-- Lorsqu'il y a deux tables il faut faire une jointure pour filtrer les données
+WHERE l.id_lieu = p.id_lieu										-- Faire 1 jointure quand on utilise 2 tables (2 pour 3 tables ...) Elles se font entre la clé primaire et la clé étrangère
+GROUP BY l.nom_lieu												-- GROUP BY Permet de grouper le nombre de personnage par lieu et d'utiliser des opérations dans SELECT
+ORDER BY nombre_personnage DESC 								-- ORDER BY Permet de trier le nombre de personne par ordre décroissant DESC et peut utiliser l'alias en référence
 
 --3. Nom des personnages + spécialité + adresse et lieu d'habitation, triés par lieu puis par nom de personnage.
 
 SELECT p.nom_personnage, s.nom_specialite, p.adresse_personnage, l.nom_lieu
 FROM personnage p, specialite s, lieu l
 WHERE s.id_specialite = p.id_specialite
-AND p.id_lieu = l.id_lieu
+AND p.id_lieu = l.id_lieu										-- AND Remplace WHERE car on ne peut en mettre q'un
 ORDER BY l.nom_lieu
 
 --4. Nom des spécialités avec nombre de personnages par spécialité (trié par nombre de personnages décroissant).
@@ -39,8 +40,8 @@ ORDER BY l.nom_lieu
 SELECT s.nom_specialite, COUNT(p.id_personnage) AS nombre_personnage
 FROM specialite s, personnage p
 WHERE p.id_specialite = s.id_specialite
-GROUP BY s.nom_specialite
-ORDER BY nombre_personnage DESC
+GROUP BY s.nom_specialite								
+ORDER BY nombre_personnage DESC									
 
 --5. Nom, date et lieu des batailles, classées de la plus récente à la plus ancienne (dates affichées au format jj/mm/aaaa).
 
@@ -51,7 +52,7 @@ ORDER BY b.date_bataille DESC
 
 --6. Nom des potions + coût de réalisation de la potion (trié par coût décroissant).
 
-SELECT  p.nom_potion, SUM(i.cout_ingredient*c.qte) AS prix
+SELECT  p.nom_potion, SUM(i.cout_ingredient*c.qte) AS prix		--SUM() Pour faire une opération sur des références ici on calcul le coût des ingrédients (coût de l'ingrédient X quantité)
 FROM potion p, composer c, ingredient i
 WHERE p.id_potion = c.id_potion
 GROUP BY p.nom_potion
@@ -63,7 +64,7 @@ SELECT i.nom_ingredient, i.cout_ingredient, c.qte, p.nom_potion
 FROM ingredient i, composer c, potion p
 WHERE p.id_potion = c.id_potion
 AND i.id_ingredient = c.id_ingredient
-AND p.nom_potion = "Santé"
+AND p.nom_potion = "Santé"										--Condition pour limiter l'affichage des références de la potion Santé
 
 --8. Nom du ou des personnages qui ont pris le plus de casques dans la bataille 'Bataille du village gaulois'.
 
@@ -72,7 +73,7 @@ FROM personnage p, prendre_casque pc, bataille b
 WHERE b.nom_bataille = "Bataille du village gaulois"
 AND p.id_personnage = pc.id_personnage
 GROUP BY p.nom_personnage, b.nom_bataille
-HAVING (qte_tot)>20
+HAVING (qte_tot)>20												--HAVING permet de filtrer en utilisant des fonctions telles que SUM(), COUNT(), AVG(), MIN() ou MAX().
 ORDER BY qte_tot DESC
 
 --9. Nom des personnages et leur quantité de potion bue (en les classant du plus grand buveur au plus petit).
@@ -88,8 +89,8 @@ ORDER BY qnt_tot_consommée DESC
 SELECT b.nom_bataille, pc.qte
 FROM bataille b, prendre_casque pc
 WHERE b.id_bataille = pc.id_bataille
-ORDER BY pc.qte DESC
-LIMIT 1
+ORDER BY pc.qte DESC											--Affichage par ordre décroissant de la valeur la plus haute à la plus basse
+LIMIT 1															--LIMIT Permet de limiter l'affichage à la première référence associé à DESC cela permet de renvoyer la valeur la plus haute
 
 --11. Combien existe-t-il de casques de chaque type et quel est leur coût total ? (classés par nombre décroissant)
 
