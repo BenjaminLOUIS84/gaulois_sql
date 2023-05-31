@@ -145,16 +145,16 @@ AND i.id_ingredient = c.id_ingredient
 
 --13. Nom du / des lieu(x) possédant le plus d'habitants, en dehors du village gaulois.
 
-SELECT l.nom_lieu, SUM(p.id_lieu) AS nombre_hab
+SELECT l.nom_lieu, COUNT(p.id_personnage) AS nombre_hab
 
 FROM lieu l									
 INNER JOIN personnage p						
-ON l.id_lieu = p.id_lieu					
+ON l.id_lieu = p.id_lieu
+					
+AND l.nom_lieu != "Village gaulois"
 
-GROUP BY l.nom_lieu
+GROUP BY l.id_lieu
 ORDER BY nombre_hab DESC
-LIMIT 7
-
 
 --14. Nom des personnages qui n'ont jamais bu aucune potion.
 
