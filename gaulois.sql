@@ -146,14 +146,17 @@ GROUP BY p.nom_personnage, ab.id_potion
 
 --A. Ajoutez le personnage suivant : Champdeblix, agriculteur résidant à la ferme Hantassion de Rotomagus.
 
-INSERT INTO personnage (id_personnage, nom_personnage, adresse_personnage, image_personnage, id_lieu, `id_specialite`)
+INSERT INTO 'personnage' ('id_personnage', 'nom_personnage', 'adresse_personnage', 'image_personnage', 'id_lieu', `id_specialite`)
 VALUES (46, 'Champdeblix', 'Ferme Hantassion', 'indisponible.jpg', 6, 12)
 
 
 --B. Autorisez Bonemine à boire de la potion magique, elle est jalouse d'Iélosubmarine...
 
+INSERT INTO `autoriser_boire` (`id_potion`, `id_personnage`) VALUES
+(1,12)
 
 --C. Supprimez les casques grecs qui n'ont jamais été pris lors d'une bataille.
+
 
 
 --D. Modifiez l'adresse de Zérozérosix : il a été mis en prison à Condate.
@@ -182,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `autoriser_boire`
   CONSTRAINT `FK_AUTO_POTION` FOREIGN KEY (`id_potion`) REFERENCES `potion` (`id_potion`)
 )
 --3
-
+INSERT INTO `autoriser_boire` (`id_potion`, `id_personnage`) VALUES
 	(1, 4),
 	(9, 5),
 	(1, 6),
