@@ -157,19 +157,36 @@ INSERT INTO `autoriser_boire` (`id_potion`, `id_personnage`) VALUES
 
 --C. Supprimez les casques grecs qui n'ont jamais été pris lors d'une bataille.
 
+DELETE FROM casque						-- DELETE FROM Permet de supprimer une valeur d'une table
 
+WHERE id_type_casque = (				--Il faut croiser 2 tables pour réaliser cette requête
+	SELECT id_type_casque				--On cherche à supprimer un type de casque
+	FROM type_casque
+	WHERE nom_type_casque = 'Grec'
+)
+
+AND id_casque NOT IN (  				--NOT IN Cible une valeur non présente à savoir les id des casque non utilisés dans la table prendre_casque
+	SELECT pc.id_casque
+	FROM prendre_casque pc
+)
 
 --D. Modifiez l'adresse de Zérozérosix : il a été mis en prison à Condate.
 
+UPDATE personnage						--UPDATE Permet de mettre à jour une table
+SET adresse_personnage = 'Prison',		--SET permet de modifier une ou plusieurs valeurs (on change l'adresse et la ville)
+id_lieu = 9 
+WHERE id_personnage = 23				--Condition pour faire ces modifications à la ligne du personnage désigné
 
 --E. La potion 'Soupe' ne doit plus contenir de persil.
 
+DELETE FROM composer c					--Pour supprimer un ingrédient de la composition 
+WHERE c.id_ingredient = 19
 
 --F. Obélix s'est trompé : ce sont 42 casques Weisenau, et non Ostrogoths, qu'il a pris lors de la bataille 'Attaque de la banque postale'. Corrigez son erreur 
 
-
-
-
+UPDATE prendre_casque
+SET id_casque = 10
+WHERE id_bataille = 9
 
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 --INFORMATIONS--
