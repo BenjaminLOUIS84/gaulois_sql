@@ -156,15 +156,14 @@ AND l.nom_lieu != "Village gaulois"
 GROUP BY l.id_lieu
 ORDER BY nombre_hab DESC
 
---14. Nom des personnages qui n'ont jamais bu aucune potion.
+--14. Nom des personnages qui n'ont jamais bu aucune potion.					
 
 SELECT p.nom_personnage, b.dose_boire
 FROM personnage p
-LEFT JOIN boire b 							--LEFT JOIN:	Jointure externe pour retourner tous les enregistrements de la table de gauche (LEFT = gauche) même si la condition n’est pas vérifié dans l’autre table.
-ON b.id_personnage = p.id_personnage		--On peut cumuler WHERE et les jointures JOIN
-WHERE b.dose_boire IS NULL					--IS NULL permet de filtrer les références qui n'ont jamais bu de potion (Valeur par défaut NULL)
-GROUP BY p.nom_personnage, b.dose_boire
-
+LEFT JOIN boire b						--LEFT JOIN:	Jointure externe pour retourner tous les enregistrements de la table de gauche (LEFT = gauche) même si la condition n’est pas vérifié dans l’autre table.
+ON b.id_personnage = p.id_personnage	--On peut cumuler WHERE et les jointures JOIN
+AND b.dose_boire IS NULL				--IS NULL permet de filtrer les références qui n'ont jamais bu de potion (Valeur par défaut NULL)
+GROUP BY p.id_personnage, b.id_potion
 
 --15. Nom du / des personnages qui n'ont pas le droit de boire de la potion 'Magique'.
 
@@ -172,12 +171,10 @@ SELECT p.nom_personnage, ab.id_potion
 FROM personnage p
 LEFT JOIN autoriser_boire ab 
 ON ab.id_personnage = p.id_personnage
-WHERE ab.id_potion IS NULL
-GROUP BY p.nom_personnage, ab.id_potion
-
+AND ab.id_potion IS NULL
+GROUP BY p.id_personnage, ab.id_potion
 
 --En écrivant toujours des requêtes SQL, modifiez la base de données comme suit :
-
 
 --A. Ajoutez le personnage suivant : Champdeblix, agriculteur résidant à la ferme Hantassion de Rotomagus.
 
