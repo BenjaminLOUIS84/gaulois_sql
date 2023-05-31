@@ -22,18 +22,12 @@ WHERE l.nom_lieu LIKE '%um'		-- La commande WHERE dans une requête SQL permet d
 --2. Nombre de personnages par lieu (trié par nombre de personnages décroissant).
 
 SELECT l.nom_lieu, COUNT(p.id_personnage) AS nombre_personnage	-- COUNT() Pour compter le nombre de références -- AS est un alias permet de renomer une colone
-FROM personnage p, lieu l										-- Lorsqu'il y a deux tables il faut faire une jointure pour filtrer les données
-WHERE l.id_lieu = p.id_lieu										-- Faire 1 jointure quand on utilise 2 tables (2 pour 3 tables ...) Elles se font entre la clé primaire et la clé étrangère
-GROUP BY l.id_lieu												-- GROUP BY Permet de grouper le nombre de personnage par lieu et d'utiliser des opérations dans SELECT
-ORDER BY nombre_personnage DESC 								-- ORDER BY Permet de trier le nombre de personne par ordre décroissant DESC et peut utiliser l'alias en référence
-
---REQUETE SQL CORRIGEE
-SELECT l.nom_lieu, COUNT(p.id_personnage)AS nombre_personnage
-FROM personnage p 
-INNER JOIN lieu l
-ON l.id_lieu = p.id_lieu
-GROUP BY l.id_lieu
-ORDER BY nombre_personnage DESC
+FROM personnage p
+INNER JOIN lieu l				-- Lorsqu'il y a deux tables il faut faire une jointure pour filtrer les données
+ON	 l.id_lieu = p.id_lieu		-- Faire 1 jointure quand on utilise 2 tables (2 pour 3 tables ...) Elles se font entre la clé primaire et la clé étrangère									
+GROUP BY l.id_lieu				-- GROUP BY Permet de grouper le nombre de personnage par lieu et d'utiliser des opérations dans SELECT
+ORDER BY nombre_personnage DESC -- ORDER BY Permet de trier le nombre de personne par ordre décroissant DESC et peut utiliser l'alias en référence
+			
 
 --3. Nom des personnages + spécialité + adresse et lieu d'habitation, triés par lieu puis par nom de personnage.
 
@@ -111,9 +105,10 @@ ORDER BY qte_tot DESC
 --9. Nom des personnages et leur quantité de potion bue (en les classant du plus grand buveur au plus petit).
 
 SELECT p.nom_personnage,  SUM(b.dose_boire) AS qnt_tot_consommée
-FROM personnage p, boire b
-WHERE p.id_personnage = b.id_personnage
-GROUP BY p.nom_personnage
+FROM personnage p
+INNER JOIN boire b
+ON p.id_personnage = b.id_personnage
+GROUP BY p.id_personnage
 ORDER BY qnt_tot_consommée DESC
 
 --10. Nom de la bataille où le nombre de casques pris a été le plus important.
@@ -122,7 +117,25 @@ SELECT b.nom_bataille, pc.qte
 FROM bataille b, prendre_casque pc
 WHERE b.id_bataille = pc.id_bataille
 ORDER BY pc.qte DESC											--Affichage par ordre décroissant de la valeur la plus haute à la plus basse
-LIMIT 1															--LIMIT Permet de limiter l'affichage à la première référence associé à DESC cela permet de renvoyer la valeur la plus haute
+LIMIT 1							
+
+
+SELECT b.nom_bataille, pc.qte
+FROM bataille b
+INNER JOIN prendre_casque pc
+ON b.id_bataille = pc.id_bataille
+
+HAVING qte>=ALL
+(SELECT pc.qte 
+FROM prendre_casque pc
+WHERE pc.id_bataille = b.id_bataille)
+
+ORDER BY pc.qte DESC
+
+
+
+
+
 
 --11. Combien existe-t-il de casques de chaque type et quel est leur coût total ? (classés par nombre décroissant)
 
