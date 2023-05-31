@@ -213,6 +213,7 @@ WHERE id_personnage = 23				--Condition pour faire ces modifications à la ligne
 
 DELETE FROM composer c					--Pour supprimer un ingrédient de la composition 
 WHERE c.id_ingredient = 19
+AND c.id_potion = 9
 
 --F. Obélix s'est trompé : ce sont 42 casques Weisenau, et non Ostrogoths, qu'il a pris lors de la bataille 'Attaque de la banque postale'. Corrigez son erreur 
 
