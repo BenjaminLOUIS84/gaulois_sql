@@ -92,7 +92,7 @@ AND b.nom_bataille = "Bataille du village gaulois"
 
 GROUP BY p.id_personnage
 
-HAVING qte_tot>=ALL 										--HAVING permet de filtrer en utilisant des fonctions telles que SUM(), COUNT(), AVG(), MIN() ou MAX().
+HAVING qte_tot>=ALL 											--HAVING permet de filtrer en utilisant des fonctions telles que SUM(), COUNT(), AVG(), MIN() ou MAX().
 
 (SELECT SUM(pc.qte) 
 FROM prendre_casque pc, bataille b
@@ -114,52 +114,42 @@ ORDER BY qnt_tot_consommée DESC
 --10. Nom de la bataille où le nombre de casques pris a été le plus important.
 
 SELECT b.nom_bataille, pc.qte
-FROM bataille b, prendre_casque pc
-WHERE b.id_bataille = pc.id_bataille
-ORDER BY pc.qte DESC											--Affichage par ordre décroissant de la valeur la plus haute à la plus basse
-LIMIT 1							
-
-
-SELECT b.nom_bataille, pc.qte
 FROM bataille b
 INNER JOIN prendre_casque pc
 ON b.id_bataille = pc.id_bataille
 
 HAVING qte>=ALL
-(SELECT pc.qte 
+(
+SELECT MAX(pc.qte)									--MAX() Permet de renvoyer la valeur la plus haute
 FROM prendre_casque pc
-WHERE pc.id_bataille = b.id_bataille)
-
-ORDER BY pc.qte DESC
-
-
-
-
-
+)
 
 --11. Combien existe-t-il de casques de chaque type et quel est leur coût total ? (classés par nombre décroissant)
 
-SELECT tc.nom_type_casque, SUM(c.id_casque) AS total_type, SUM(c.cout_casque) AS cout_total_type
-FROM type_casque tc, casque c
-WHERE tc.id_type_casque = c.id_type_casque
-GROUP BY tc.nom_type_casque
+SELECT tc.nom_type_casque, COUNT(c.id_casque) AS total_type, SUM(c.cout_casque) AS cout_total_type
+FROM type_casque tc
+INNER JOIN casque c
+ON tc.id_type_casque = c.id_type_casque
+GROUP BY tc.id_type_casque
 ORDER BY total_type, cout_total_type
 
 --12. Nom des potions dont un des ingrédients est le poisson frais.
 
-SELECT p.nom_potion, c.qte, i.nom_ingredient
-FROM potion p , ingredient i, composer c
-WHERE i.nom_ingredient = "Poisson frais"
-AND p.id_potion = c.id_potion
+SELECT p.nom_potion, c.qte, i.nom_ingredient	--Equivaut à 	FROM lieu l, personnage p
+FROM potion p 									--				WHERE l.id_lieu = p.id_lieu
+INNER JOIN ingredient i							--INNER JOIN:	Jointure interne pour retourner les enregistrements quand la condition est vrai dans les 2 tables. 
+ON i.nom_ingredient = "Poisson frais"		
+INNER JOIN composer c
+ON p.id_potion = c.id_potion
 AND i.id_ingredient = c.id_ingredient
 
 --13. Nom du / des lieu(x) possédant le plus d'habitants, en dehors du village gaulois.
 
 SELECT l.nom_lieu, SUM(p.id_lieu) AS nombre_hab
 
-FROM lieu l									--Equivaut à 	FROM lieu l, personnage p
-INNER JOIN personnage p						--				WHERE l.id_lieu = p.id_lieu
-ON l.id_lieu = p.id_lieu					--INNER JOIN:	Jointure interne pour retourner les enregistrements quand la condition est vrai dans les 2 tables. 
+FROM lieu l									
+INNER JOIN personnage p						
+ON l.id_lieu = p.id_lieu					
 
 GROUP BY l.nom_lieu
 ORDER BY nombre_hab DESC
