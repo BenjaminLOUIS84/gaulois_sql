@@ -24,7 +24,7 @@ WHERE l.nom_lieu LIKE '%um'		-- La commande WHERE dans une requête SQL permet d
 SELECT l.nom_lieu, COUNT(p.id_personnage) AS nombre_personnage	-- COUNT() Pour compter le nombre de références -- AS est un alias permet de renomer une colone
 FROM personnage p, lieu l										-- Lorsqu'il y a deux tables il faut faire une jointure pour filtrer les données
 WHERE l.id_lieu = p.id_lieu										-- Faire 1 jointure quand on utilise 2 tables (2 pour 3 tables ...) Elles se font entre la clé primaire et la clé étrangère
-GROUP BY l.nom_lieu												-- GROUP BY Permet de grouper le nombre de personnage par lieu et d'utiliser des opérations dans SELECT
+GROUP BY l.id_lieu												-- GROUP BY Permet de grouper le nombre de personnage par lieu et d'utiliser des opérations dans SELECT
 ORDER BY nombre_personnage DESC 								-- ORDER BY Permet de trier le nombre de personne par ordre décroissant DESC et peut utiliser l'alias en référence
 
 --REQUETE SQL CORRIGEE
@@ -88,12 +88,25 @@ AND p.nom_potion = "Santé"										--Condition pour limiter l'affichage des r�
 --8. Nom du ou des personnages qui ont pris le plus de casques dans la bataille 'Bataille du village gaulois'.
 
 SELECT p.nom_personnage, SUM(pc.qte) AS qte_tot, b.nom_bataille
-FROM personnage p, prendre_casque pc, bataille b
-WHERE b.nom_bataille = "Bataille du village gaulois"
-AND p.id_personnage = pc.id_personnage
-GROUP BY p.nom_personnage, b.nom_bataille
-HAVING (qte_tot)>20												--HAVING permet de filtrer en utilisant des fonctions telles que SUM(), COUNT(), AVG(), MIN() ou MAX().
-ORDER BY qte_tot DESC
+FROM personnage p  
+
+INNER JOIN prendre_casque pc
+ON p.id_personnage = pc.id_personnage
+INNER JOIN bataille b
+ON pc.id_bataille = b.id_bataille
+AND b.nom_bataille = "Bataille du village gaulois"
+
+GROUP BY p.id_personnage
+
+HAVING qte_tot>=ALL 										--HAVING permet de filtrer en utilisant des fonctions telles que SUM(), COUNT(), AVG(), MIN() ou MAX().
+
+(SELECT SUM(pc.qte) 
+FROM prendre_casque pc, bataille b
+WHERE b.id_bataille = pc.id_bataille
+AND b.nom_bataille = "Bataille du village gaulois"
+GROUP BY id_personnage)
+
+ORDER BY qte_tot DESC 
 
 --9. Nom des personnages et leur quantité de potion bue (en les classant du plus grand buveur au plus petit).
 
