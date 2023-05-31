@@ -133,59 +133,36 @@ GROUP BY p.nom_personnage, b.dose_boire
 
 --15. Nom du / des personnages qui n'ont pas le droit de boire de la potion 'Magique'.
 
+SELECT p.nom_personnage, ab.id_potion
+FROM personnage p
+LEFT JOIN autoriser_boire ab 
+ON ab.id_personnage = p.id_personnage
+WHERE ab.id_potion IS NULL
+GROUP BY p.nom_personnage, ab.id_potion
 
 
+--En écrivant toujours des requêtes SQL, modifiez la base de données comme suit :
 
 
+--A. Ajoutez le personnage suivant : Champdeblix, agriculteur résidant à la ferme Hantassion de Rotomagus.
+
+INSERT INTO personnage (id_personnage, nom_personnage, adresse_personnage, image_personnage, id_lieu, `id_specialite`)
+VALUES (46, 'Champdeblix', 'Ferme Hantassion', 'indisponible.jpg', 6, 12)
 
 
+--B. Autorisez Bonemine à boire de la potion magique, elle est jalouse d'Iélosubmarine...
 
 
+--C. Supprimez les casques grecs qui n'ont jamais été pris lors d'une bataille.
 
 
+--D. Modifiez l'adresse de Zérozérosix : il a été mis en prison à Condate.
 
 
+--E. La potion 'Soupe' ne doit plus contenir de persil.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+--F. Obélix s'est trompé : ce sont 42 casques Weisenau, et non Ostrogoths, qu'il a pris lors de la bataille 'Attaque de la banque postale'. Corrigez son erreur 
 
 
 
@@ -205,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `autoriser_boire`
   CONSTRAINT `FK_AUTO_POTION` FOREIGN KEY (`id_potion`) REFERENCES `potion` (`id_potion`)
 )
 --3
-INSERT INTO `autoriser_boire` (`id_potion`, `id_personnage`) VALUES
+
 	(1, 4),
 	(9, 5),
 	(1, 6),
