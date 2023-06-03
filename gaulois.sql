@@ -149,10 +149,8 @@ SELECT l.nom_lieu, COUNT(p.id_personnage) AS nombre_hab
 
 FROM lieu l									
 INNER JOIN personnage p						
-ON l.id_lieu = p.id_lieu
-					
+ON l.id_lieu = p.id_lieu			
 AND l.nom_lieu != "Village gaulois"
-
 GROUP BY l.id_lieu
 ORDER BY nombre_hab DESC
 
